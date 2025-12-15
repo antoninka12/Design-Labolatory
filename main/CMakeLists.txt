@@ -1,3 +1,3 @@
-idf_component_register(SRCS "mainforoled.c" "flex.c"
+idf_component_register(SRCS "main.c"
                        INCLUDE_DIRS "."
-                       REQUIRES oled)
+                       REQUIRES oled flex)
