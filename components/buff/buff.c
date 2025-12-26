@@ -13,11 +13,10 @@ en_buff buffer[BUFFER_SIZE]; //powołanie bufora
 uint8_t position=0; //pozycja w buforze
 
 //save buff
-bool count=false; //czy już liczymy czas
 bool saved=false; //czy dana już zapisana
 uint64_t start=0;//czas startu
 uint64_t last_data=0; //ostatnie dane jakie dostał bufor
-en_buff last=EN_NONE;
+
 
 
 //read buff
@@ -31,7 +30,7 @@ void clear_buff(){
     saved=false;
     start=0;
     last_data=0;
-    last=EN_NONE;
+
 }
 
 void save_buff(en_buff current)
