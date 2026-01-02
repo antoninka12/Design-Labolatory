@@ -8,6 +8,7 @@
 #include "oled_basic.h" 
 #include "bitmap.h"
 #include "flex.h"
+#include "buff.h"
 
 //wszystkie includy to must have zeby działało
 
@@ -80,11 +81,12 @@ void app_main(void){
             ESP_LOGI(TAG, "clearing OLED display");
             ESP_ERROR_CHECK(oled_clear(I2C_PORT));
             vTaskDelay(pdMS_TO_TICKS(300));
-        }
+        }  
     }
 
 
-} //kikat 
+}
+ //kikat 
 //opis funkcjonalnosc, ciekawy kod
 //prezentacja ze slajdami/ jak projekt na inzynierke na 10min
 //filmik jako pokaz działania z tekstem albo głosem
