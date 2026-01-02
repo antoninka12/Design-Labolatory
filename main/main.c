@@ -84,4 +84,10 @@ void app_main(void){
     }
 
 
-}
+} //kikat 
+//opis funkcjonalnosc, ciekawy kod
+//prezentacja ze slajdami/ jak projekt na inzynierke na 10min
+//filmik jako pokaz działania z tekstem albo głosem
+
+//obsługa 
+
