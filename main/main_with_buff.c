@@ -6,7 +6,7 @@
 #include "esp_err.h"
 
 #include "oled_basic.h" 
-#include "bitmap.h"
+#include "bitmap.h" 
 #include "flex.h"
 #include "buff.h"
 

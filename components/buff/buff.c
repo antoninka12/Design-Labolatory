@@ -4,12 +4,17 @@
 #include "esp_log.h" 
 
 #include "buff.h"
-#include "oled_basic.h"
-#include "bitmap.h"
+#include "oled_basic.h" //to tez nie bedzie potrzebne
+#include "bitmap.h" //nie bedzie potrzebne
+//dodane: 
+#include "oled_text.h" 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
 
 #define I2C_PORT I2C_NUM_0 //do I2C z kodu Tosi
 
-en_buff buffer[BUFFER_SIZE]; //powołanie bufora
+static char buffer[BUFFER_SIZE]; //powołanie bufora
 uint8_t position=0; //pozycja w buforze
 
 //save buff
@@ -24,7 +29,7 @@ bool read=false;
 
 void clear_buff(){
     for(int i=0; i<BUFFER_SIZE; i++){
-        buffer[i]=EN_NONE;
+        buffer[i]='\0';
     }
     position=0;
     saved=false;
@@ -33,22 +38,22 @@ void clear_buff(){
 
 }
 
-void save_buff(en_buff current)
+void save_buff(char current)
 {
     uint64_t now = esp_timer_get_time() / 1000;//czas 
     
-    if(current==EN_NONE){
+    if(current=='\0'){
         start=0;
         saved=false;
         //ESP_LOGI("BUFF", "pos=%u", position);
     }
 
-    if(current!=EN_NONE && start==0){
+    if(current!='\0' && start==0){
         start=now;
         //ESP_LOGI("BUFF", "stan=%llu", start);
     }
 
-    if(!saved && current!=EN_NONE && (now-start)>=4000){
+    if(!saved && current!='\0' && (now-start)>=4000){
         if(position<BUFFER_SIZE){
             buffer[position]=current;
             position++;
@@ -58,12 +63,12 @@ void save_buff(en_buff current)
         }
     }
 
-    if(current==EN_NONE && position>0 && last_data==0){
+    if(current=='\0' && position>0 && last_data==0){
         last_data=now;
         ESP_LOGI("BUFF", "time");
     }
 
-    if(position>0 && (now-last_data>=3000) && current==EN_NONE){
+    if(position>0 && (now-last_data>=3000) && current=='\0'){
    
         ESP_LOGI("BUFF", "read");
         for(int i=0; i<position; i++){
@@ -83,9 +88,9 @@ void read_block_buff(){
     
 }
 
-void send_buff(en_buff x)
+void send_buff(char x)
 {
-    switch(x){
+    /*switch(x){
         case EN_JESC: 
             ESP_ERROR_CHECK(oled_draw_bitmap(I2C_PORT, jesc_bitmap, jesc_bitmap_len)); break;
         case EN_PIC:  
@@ -96,6 +101,13 @@ void send_buff(en_buff x)
             ESP_ERROR_CHECK(oled_draw_bitmap(I2C_PORT, ok_bitmap, ok_bitmap_len));   break;
         default:       
             ESP_ERROR_CHECK(oled_clear(I2C_PORT)); break;
-    }
+    }*/
+   //nowa logika:
+   if(x=='\0'){
+    return; //pusty znak - nic nie robimy
+   }
+   ESP_ERROR_CHECK(oled_text_put_char(x));
+   ESP_ERROR_CHECK(oled_text_flush(I2C_PORT));
+
 }
 
