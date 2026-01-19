@@ -4,10 +4,10 @@
 #include "esp_log.h" 
 
 #include "buff.h"
-#include "oled_basic.h" //to tez nie bedzie potrzebne
-#include "bitmap.h" //nie bedzie potrzebne
-//dodane: 
-#include "oled_text.h" 
+#include "oled_basic.h" //to tez nie bedzie potrzebne - A
+#include "bitmap.h" //nie bedzie potrzebne -A
+//dodane: -A
+#include "oled_text.h"  //to -A
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
