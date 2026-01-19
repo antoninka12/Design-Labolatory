@@ -12,10 +12,10 @@ extern "C" {
 //initialize oled - must have before using other functions
 esp_err_t oled_init(i2c_port_t i2c_num);
 
-// celaring oled
+// celaring oled -- nie korzystamy w main
 esp_err_t oled_clear(i2c_port_t i2c_num);
 
-// bitmap display, using here function from bitmap.h 
+// bitmap display, using here function from bitmap.h  -- nie korzystamy w main
 esp_err_t oled_draw_bitmap(i2c_port_t i2c_num, const uint8_t* bitmap, size_t size);
 
 #ifdef __cplusplus

@@ -106,8 +106,8 @@ void send_buff(char x)
    if(x=='\0'){
     return; //pusty znak - nic nie robimy
    }
-   ESP_ERROR_CHECK(oled_text_put_char(x));
-   ESP_ERROR_CHECK(oled_text_flush(I2C_PORT));
+   ESP_ERROR_CHECK(oled_text_put_char(x)); //wpisywanie znaku 
+   ESP_ERROR_CHECK(oled_text_flush(I2C_PORT)); //wysyłanie przez I2C
 
 }
 
