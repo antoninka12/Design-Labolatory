@@ -52,10 +52,10 @@ void app_main(void)
   
     vTaskDelay(pdMS_TO_TICKS(500));
 
-    flex_init(); //Wstępna konfiguracja czujnika
+    //flex_init(); //Wstępna konfiguracja czujnika
 
-    const int n1=700; //próg 
-    const int n2=400; //prog2
+    //const int n1=700; //próg 
+    //const int n2=400; //prog2
     clear_buff(); //wyczysć przed startem
 
     const char text[] = "hello world"; //literki ktore chcemy wypisac -  symulacja podawania literek i wpiswywania ich
