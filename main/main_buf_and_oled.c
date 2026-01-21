@@ -52,19 +52,50 @@ void app_main(void)
   
     vTaskDelay(pdMS_TO_TICKS(500));
 
-    //flex_init(); //Wstępna konfiguracja czujnika
+    flex_init(); //Wstępna konfiguracja czujnika
 
-    //const int n1=700; //próg 
-    //const int n2=400; //prog2
+    const int n1=700; //próg 
+    const int n2=400; //prog2
     clear_buff(); //wyczysć przed startem
 
     const char text[] = "hello world"; //literki ktore chcemy wypisac -  symulacja podawania literek i wpiswywania ich
     //KORZYSTAMY Z BUFORA I SEND BUFF BO ZOSTALO TAM DODANY OLED
     while (1) {
-        for (int i = 0; text[i] != '\0'; i++) {
+        //Palec wskazujący
+        if(flex_read1()<n1 && flex_read()>n2){
+            send_buff("A");
+        } else if(flex_read1()<n2){
+            send_buff("E");
+        } 
+
+        //środkowy
+        if(flex_read2()<n1 && flex_read2()>n2){
+            send_buff("L");
+        } else if(flex_read1()<n2){
+            send_buff("M");
+        } 
+
+       if(flex_read3()<n1 && flex_read3()>n2){
+            send_buff("L");
+        } else if(flex_read3()<n2){
+            send_buff("M");
+        }
+    
+       if(flex_read4()<n1 && flex_read4()>n2){
+            send_buff("L");
+        } else if(flex_read4()<n2){
+            send_buff("M");
+        }
+
+       if(flex_read5()<n1 && flex_read5()>n2){
+            send_buff("L");
+        } else if(flex_read1()<n2){
+            send_buff("M");
+        }
+        /*for (int i = 0; text[i] != '\0'; i++) {
             send_buff(text[i]);                 // symulacja pisania 
             vTaskDelay(pdMS_TO_TICKS(400));     // prędkość „pisania”
-        }
+        }*/
 
         vTaskDelay(pdMS_TO_TICKS(3000));
 
