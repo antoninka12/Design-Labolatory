@@ -10,6 +10,7 @@
 #include "oled_basic.h"
 #include "oled_text.h"
 #include "buff.h"
+#include "flex.h"
 
 #define TAG "MAIN" //w mainie korzystam z logów i tagów, w razie błędów można odczytac i jesli bedzie w pliku main to bedzie wlasnie to napisane
 
@@ -58,40 +59,45 @@ void app_main(void)
     const int n2=400; //prog2
     clear_buff(); //wyczysć przed startem
 
-    const char text[] = "hello world"; //literki ktore chcemy wypisac -  symulacja podawania literek i wpiswywania ich
+    //const char text[] = "hello world"; //literki ktore chcemy wypisac -  symulacja podawania literek i wpiswywania ich
     //KORZYSTAMY Z BUFORA I SEND BUFF BO ZOSTALO TAM DODANY OLED
     while (1) {
+        int index_finger=flex_read1();
+        int middle_finger=flex_read2();
+        int ring_finger=flex_read3();
+        int little_finger=flex_read4();
+        int thumb=flex_read5();
+
         //Palec wskazujący
-        if(flex_read1()<n1 && flex_read()>n2){
-            send_buff("A");
-        } else if(flex_read1()<n2){
-            send_buff("E");
+        if(index_finger<n1 && index_finger>n2){
+            send_buff('A');
+        } else if(index_finger<n2){
+            send_buff('E');
         } 
 
         //środkowy
-        if(flex_read2()<n1 && flex_read2()>n2){
-            send_buff("L");
-        } else if(flex_read1()<n2){
-            send_buff("M");
+        if(middle_finger<n1 && middle_finger>n2){
+            send_buff('L');
+        } else if(middle_finger<n2){
+            send_buff('M');
         } 
 
-       if(flex_read3()<n1 && flex_read3()>n2){
-            send_buff("L");
-        } else if(flex_read3()<n2){
-            send_buff("M");
+        //serdeczny
+       if(ring_finger<n1 && ring_finger>n2){
+            send_buff('L');
+        } else if(ring_finger<n2){
+            send_buff('M');
         }
     
-       if(flex_read4()<n1 && flex_read4()>n2){
-            send_buff("L");
-        } else if(flex_read4()<n2){
-            send_buff("M");
+       if(little_finger<n1 && little_finger>n2){
+            send_buff('L');
+        } else if(little_finger<n2){
+            send_buff('M');
         }
 
-       if(flex_read5()<n1 && flex_read5()>n2){
-            send_buff("L");
-        } else if(flex_read1()<n2){
-            send_buff("M");
-        }
+        if(thumb<n1 ){
+            oled_text_backspace();
+        } 
         /*for (int i = 0; text[i] != '\0'; i++) {
             send_buff(text[i]);                 // symulacja pisania 
             vTaskDelay(pdMS_TO_TICKS(400));     // prędkość „pisania”
