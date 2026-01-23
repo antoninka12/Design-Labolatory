@@ -96,7 +96,6 @@ esp_err_t oled_text_put_char(char c){
     return ESP_OK;
 }
 
-
 esp_err_t oled_text_backspace(void) //cofanie literki
 {
     if (cursor_x < FONT_WIDTH) { //jesli jest na poczatku to nie ma co usuwac, dziala tylko w danej linii
@@ -108,11 +107,17 @@ esp_err_t oled_text_backspace(void) //cofanie literki
     uint16_t index_low  = cursor_page * OLED_WIDTH + cursor_x;
     uint16_t index_high = (cursor_page + 1) * OLED_WIDTH + cursor_x;
 
+    ESP_LOGI("BS", "page=%d x=%d low=%d high=%d", (int)cursor_page, (int)cursor_x, (int)index_low, (int)index_high);
+
     memset(&oled_buffer[index_low],  0x00, FONT_WIDTH); //czyszczenie
     memset(&oled_buffer[index_high], 0x00, FONT_WIDTH);
 
     return ESP_OK;
 }
+
+
+
+
 esp_err_t oled_text_flush(i2c_port_t i2c_num)
 {
     esp_err_t ret = oled_draw_bitmap(i2c_num, oled_buffer, sizeof(oled_buffer)); //rysowanie bitmapy

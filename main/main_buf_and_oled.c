@@ -63,73 +63,77 @@ void app_main(void)
     //KORZYSTAMY Z BUFORA I SEND BUFF BO ZOSTALO TAM DODANY OLED
     while (1) {
         int thumb = flex_read5();
-        if (thumb < n1) {
+        int index_finger = flex_read1();
+        int middle_finger = flex_read2();
+        int ring_finger = flex_read3();
+        int little_finger = flex_read4();
+
+        ESP_LOGI("ADC",
+         "T=%4d  I=%4d  M=%4d  R=%4d  L=%4d",
+         thumb, index_finger, middle_finger, ring_finger, little_finger);
+
+
+        // 1) Kciuk
+        if (thumb < n1 && thumb > n2) {
             oled_text_backspace();
             ESP_ERROR_CHECK(oled_text_flush(I2C_PORT));
-            vTaskDelay(pdMS_TO_TICKS(200));   // debounce / antyspam
-            continue;                         // NIE czytaj reszty czujników w tej iteracji
+            vTaskDelay(pdMS_TO_TICKS(3000));   // debounce / antyspam
+            continue;
+        } else if (thumb<n2){
+            ESP_ERROR_CHECK(oled_text_clear());
+            vTaskDelay(pdMS_TO_TICKS(3000));
+            continue;
         }
 
+        
         // 2) Wskazujący
-        int index_finger = flex_read1();
         if (index_finger < n1 && index_finger > n2) {
-            send_buff('A');
-            vTaskDelay(pdMS_TO_TICKS(200));
+            send_buff(' ');
+            vTaskDelay(pdMS_TO_TICKS(3000));
             continue;
         } else if (index_finger < n2) {
-            send_buff('E');
-            vTaskDelay(pdMS_TO_TICKS(200));
+            send_buff('A');
+            vTaskDelay(pdMS_TO_TICKS(3000));
             continue;
         }
 
         // 3) Środkowy
-        int middle_finger = flex_read2();
         if (middle_finger < n1 && middle_finger > n2) {
-            send_buff('L');
-            vTaskDelay(pdMS_TO_TICKS(200));
+            send_buff('T');
+            vTaskDelay(pdMS_TO_TICKS(3000));
             continue;
         } else if (middle_finger < n2) {
-            send_buff('M');
-            vTaskDelay(pdMS_TO_TICKS(200));
+            send_buff('R');
+            vTaskDelay(pdMS_TO_TICKS(3000));
             continue;
         }
 
         // 4) Serdeczny
-        int ring_finger = flex_read3();
         if (ring_finger < n1 && ring_finger > n2) {
-            send_buff('L');
-            vTaskDelay(pdMS_TO_TICKS(200));
+            send_buff('Y');
+            vTaskDelay(pdMS_TO_TICKS(3000));
             continue;
         } else if (ring_finger < n2) {
-            send_buff('M');
-            vTaskDelay(pdMS_TO_TICKS(200));
+            send_buff('C');
+            vTaskDelay(pdMS_TO_TICKS(3000));
             continue;
         }
 
         // 5) Mały
-        int little_finger = flex_read4();
         if (little_finger < n1 && little_finger > n2) {
-            send_buff('L');
-            vTaskDelay(pdMS_TO_TICKS(200));
+            send_buff('J');
+            vTaskDelay(pdMS_TO_TICKS(3000));
             continue;
         } else if (little_finger < n2) {
-            send_buff('M');
-            vTaskDelay(pdMS_TO_TICKS(200));
+            send_buff('E');
+            vTaskDelay(pdMS_TO_TICKS(3000));
             continue;
         }
 
-    // jeśli nic się nie stało
-    vTaskDelay(pdMS_TO_TICKS(20));
-        /*for (int i = 0; text[i] != '\0'; i++) {
-            send_buff(text[i]);                 // symulacja pisania 
-            vTaskDelay(pdMS_TO_TICKS(400));     // prędkość „pisania”
-        }*/
 
-        vTaskDelay(pdMS_TO_TICKS(3000));
-
-        ESP_ERROR_CHECK(oled_text_clear()); //jesli chcemy wyczyscic
+        // //jesli chcemy wyczyscic
         ESP_ERROR_CHECK(oled_text_flush(I2C_PORT)); //wyslac, robimy to tak bo tego nie ma w buff.c
 
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(pdMS_TO_TICKS(2000));
     }
 }

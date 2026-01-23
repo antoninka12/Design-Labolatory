@@ -90,18 +90,7 @@ void read_block_buff(){
 
 void send_buff(char x)
 {
-    /*switch(x){
-        case EN_JESC: 
-            ESP_ERROR_CHECK(oled_draw_bitmap(I2C_PORT, jesc_bitmap, jesc_bitmap_len)); break;
-        case EN_PIC:  
-            ESP_ERROR_CHECK(oled_draw_bitmap(I2C_PORT, pic_bitmap, pic_bitmap_len));  break;
-        case EN_NIE:   
-            ESP_ERROR_CHECK(oled_draw_bitmap(I2C_PORT, nie_bitmap, nie_bitmap_len));  break;
-        case EN_OK:   
-            ESP_ERROR_CHECK(oled_draw_bitmap(I2C_PORT, ok_bitmap, ok_bitmap_len));   break;
-        default:       
-            ESP_ERROR_CHECK(oled_clear(I2C_PORT)); break;
-    }*/
+
    //nowa logika:
    if(x=='\0'){
     return; //pusty znak - nic nie robimy

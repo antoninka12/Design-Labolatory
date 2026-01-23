@@ -62,12 +62,12 @@ int flex_read3(void)
     return adc1_get_raw(FLEX_CH3); //Zwraca odczyt danych z flex
 }
 
-int flex_read3(void)
+int flex_read4(void)
 {
     return adc1_get_raw(FLEX_CH4); //Zwraca odczyt danych z flex
 }
 
-int flex_read3(void)
+int flex_read5(void)
 {
     return adc1_get_raw(FLEX_CH5); //Zwraca odczyt danych z flex
 }
