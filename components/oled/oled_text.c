@@ -5,6 +5,7 @@
 
 #include "oled_text.h"
 #include "oled_basic.h"
+#include "flex.h" 
 #include "X11fixed7x14.h" //font
 #include <string.h>
 
@@ -14,6 +15,9 @@
 #define OLED_HEIGHT 64
 #define OLED_PAGES (OLED_HEIGHT / 8) //each page is 8 pixels height = 8 pages
  
+#define STATUS_PAGE   (OLED_PAGES - FONT_PAGES)   // ostatnia linia
+#define STATUS_X      0                            // start od lewej
+
 #define FONT_WIDTH 6
 #define FONT_HEIGHT 14
 #define FONT_PAGES 2 //14 pixels height -> 2 pages (8+6) 
@@ -95,6 +99,104 @@ esp_err_t oled_text_put_char(char c){
     cursor_x += FONT_WIDTH; //po narysowaniu znaku przesuwamy kursor x
     return ESP_OK;
 }
+
+esp_err_t oled_status_put5(int n1, int n2)
+{
+    //zbiorniki na wartość liczbową stanu
+    int thumb_num;
+    int index_finger_num;
+    int middle_finger_num;
+    int ring_finger_num;
+    int little_finger_num; 
+
+    // zapamiętaj aktualny kursor “górnego” tekstu
+    uint8_t saved_x = cursor_x;
+    uint8_t saved_page = cursor_page;
+    
+    cursor_x = STATUS_X;
+    cursor_page = STATUS_PAGE;
+
+    int thumb = flex_read5();
+    int index_finger = flex_read1();
+    int middle_finger = flex_read2();
+    int ring_finger = flex_read3();
+    int little_finger = flex_read4();
+
+     // 1) Kciuk
+    if (thumb < n1 && thumb > n2) {
+        thumb_num=1;
+    } else if (thumb<n2){
+        thumb_num=2;
+    } else {
+        thumb_num=0;
+    }
+
+    // 2) Wskazujący
+    if (index_finger < n1 && index_finger > n2) {
+        index_finger_num=1;
+    } else if (index_finger < n2) {
+        index_finger_num=2;
+    } else {
+        index_finger_num=0;
+    }
+
+    // 3) Środkowy
+    if (middle_finger < n1 && middle_finger > n2) {
+        middle_finger_num=1;
+    } else if (middle_finger < n2) {
+        middle_finger_num=2;
+    } else {
+        middle_finger_num=0;
+    }
+
+    // 4) Serdeczny
+    if (ring_finger < n1 && ring_finger > n2) {
+        ring_finger_num=1;
+    } else if (ring_finger < n2) {
+        ring_finger_num=2;
+    } else{
+        ring_finger_num=0;        
+    }
+
+    // 5) Mały
+    if (little_finger < n1 && little_finger > n2) {
+        little_finger_num=1;
+    } else if (little_finger < n2) {
+        little_finger_num=2;
+    } else {
+        little_finger_num=0;
+    }
+    
+    // wyczyść sam pasek statusu, żeby nie zostawały stare cyfry
+    for (int i = 0; i < OLED_WIDTH / FONT_WIDTH; i++) {
+        oled_text_draw_char(cursor_x + i*FONT_WIDTH, cursor_page, ' ');
+    }
+    cursor_x = STATUS_X; // wróć na początek po czyszczeniu
+
+    // wypisz STANY, a nie n1..n5
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%d %d %d %d %d",
+             thumb_num, index_finger_num, middle_finger_num,
+             ring_finger_num, little_finger_num);
+
+    for (char *p = buf; *p; p++) {
+        esp_err_t r = oled_text_put_char(*p);
+        if (r != ESP_OK) {
+            cursor_x = saved_x;
+            cursor_page = saved_page;
+            return r;
+        }
+    }
+
+    // przywróć kursor “górnego” tekstu
+    cursor_x = saved_x;
+    cursor_page = saved_page;
+    
+
+    return ESP_OK;
+}
+
+
 
 esp_err_t oled_text_backspace(void) //cofanie literki
 {

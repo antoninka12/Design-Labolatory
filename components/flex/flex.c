@@ -71,3 +71,18 @@ int flex_read5(void)
 {
     return adc1_get_raw(FLEX_CH5); //Zwraca odczyt danych z flex
 }
+
+bool flex_active(int v, int  n1)
+{
+    return (v < n1);
+}
+
+bool only_one_active(int t, int i, int m, int r, int l, int n1){
+    int add=0;
+    if(flex_active(t, n1)) add++;
+    if(flex_active(i, n1)) add++;
+    if(flex_active(m, n1)) add++;
+    if(flex_active(r, n1)) add++;
+    if(flex_active(l, n1)) add++;
+    return (add==1);
+}

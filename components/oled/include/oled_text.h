@@ -8,6 +8,7 @@
 esp_err_t oled_text_init(void);
 esp_err_t oled_text_clear(void);
 esp_err_t oled_text_put_char(char c); //wpisywanie char do bufora
+esp_err_t oled_status_put5(int n1, int n2); //zgięcie
 esp_err_t oled_text_backspace(void); //cofanie znaku, nic nie robi ejsli jest na poczatku linii, nie da sie cofnac do poprzedniej linii
 esp_err_t oled_text_newline(void); //nowa linia
 esp_err_t oled_text_flush(i2c_port_t i2c_num); //wysylanie

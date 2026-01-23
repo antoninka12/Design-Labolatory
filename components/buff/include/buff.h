@@ -7,13 +7,7 @@
 
 #define BUFFER_SIZE 32
 
-/*typedef enum {
-    EN_NONE=0,
-    EN_JESC,
-    EN_PIC,
-    EN_NIE,
-    EN_OK
-} en_buff; */ //nie potrzebne - korzystamy z char i literek -A
+
 
 void clear_buff(void);
 void save_buff(char current); //char zamiast en_buff -A

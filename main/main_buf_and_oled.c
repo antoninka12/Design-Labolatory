@@ -55,85 +55,106 @@ void app_main(void)
 
     flex_init(); //Wstępna konfiguracja czujnika
 
-    const int n1=700; //próg 
+    bool waiting=false;
+    const int n1=630; //próg 
     const int n2=400; //prog2
+
     clear_buff(); //wyczysć przed startem
 
     //const char text[] = "hello world"; //literki ktore chcemy wypisac -  symulacja podawania literek i wpiswywania ich
     //KORZYSTAMY Z BUFORA I SEND BUFF BO ZOSTALO TAM DODANY OLED
     while (1) {
+        static TickType_t last_read_time = 0;
         int thumb = flex_read5();
         int index_finger = flex_read1();
         int middle_finger = flex_read2();
         int ring_finger = flex_read3();
         int little_finger = flex_read4();
 
-        ESP_LOGI("ADC",
-         "T=%4d  I=%4d  M=%4d  R=%4d  L=%4d",
-         thumb, index_finger, middle_finger, ring_finger, little_finger);
-
-
-        // 1) Kciuk
-        if (thumb < n1 && thumb > n2) {
-            oled_text_backspace();
+        //ESP_LOGI("wait:", "%d", waiting);
+        if (!waiting) {
+            oled_status_put5(n1, n2);  
             ESP_ERROR_CHECK(oled_text_flush(I2C_PORT));
-            vTaskDelay(pdMS_TO_TICKS(3000));   // debounce / antyspam
-            continue;
-        } else if (thumb<n2){
-            ESP_ERROR_CHECK(oled_text_clear());
-            vTaskDelay(pdMS_TO_TICKS(3000));
+            last_read_time = xTaskGetTickCount();
+            waiting = true;                     // start odliczania
+        }
+
+        // 2) jeśli jeszcze nie minęły 2 sekundy — tylko czekaj i NIE odczytuj ponownie
+        if ((xTaskGetTickCount() - last_read_time) < pdMS_TO_TICKS(2000)) {
+            vTaskDelay(pdMS_TO_TICKS(300));
             continue;
         }
 
-        
-        // 2) Wskazujący
-        if (index_finger < n1 && index_finger > n2) {
-            send_buff(' ');
-            vTaskDelay(pdMS_TO_TICKS(3000));
-            continue;
-        } else if (index_finger < n2) {
-            send_buff('A');
-            vTaskDelay(pdMS_TO_TICKS(3000));
-            continue;
-        }
+        ESP_LOGI("ADC",
+        "T=%4d  I=%4d  M=%4d  R=%4d  L=%4d",
+        thumb, index_finger, middle_finger, ring_finger, little_finger);
 
-        // 3) Środkowy
-        if (middle_finger < n1 && middle_finger > n2) {
-            send_buff('T');
-            vTaskDelay(pdMS_TO_TICKS(3000));
-            continue;
-        } else if (middle_finger < n2) {
-            send_buff('R');
-            vTaskDelay(pdMS_TO_TICKS(3000));
-            continue;
-        }
-
-        // 4) Serdeczny
-        if (ring_finger < n1 && ring_finger > n2) {
-            send_buff('Y');
-            vTaskDelay(pdMS_TO_TICKS(3000));
-            continue;
-        } else if (ring_finger < n2) {
-            send_buff('C');
-            vTaskDelay(pdMS_TO_TICKS(3000));
-            continue;
-        }
-
-        // 5) Mały
-        if (little_finger < n1 && little_finger > n2) {
-            send_buff('J');
-            vTaskDelay(pdMS_TO_TICKS(3000));
-            continue;
-        } else if (little_finger < n2) {
-            send_buff('E');
-            vTaskDelay(pdMS_TO_TICKS(3000));
-            continue;
-        }
-
-
-        // //jesli chcemy wyczyscic
-        ESP_ERROR_CHECK(oled_text_flush(I2C_PORT)); //wyslac, robimy to tak bo tego nie ma w buff.c
+        waiting = false;
 
         vTaskDelay(pdMS_TO_TICKS(2000));
+        bool only_one = only_one_active(thumb, index_finger, middle_finger, ring_finger, little_finger, n1);
+        
+        if(only_one){
+            // 1) Kciuk
+            if (thumb < n1 && thumb > n2) {
+                oled_text_backspace();
+                ESP_ERROR_CHECK(oled_text_flush(I2C_PORT));
+                vTaskDelay(pdMS_TO_TICKS(3000));   // debounce / antyspam
+                continue;
+            } else if (thumb<n2){
+                ESP_ERROR_CHECK(oled_text_clear());
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            }
+
+            
+            // 2) Wskazujący
+            if (index_finger < n1 && index_finger > n2) {
+                send_buff(' ');
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            } else if (index_finger < n2) {
+                send_buff('A');
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            }
+
+            // 3) Środkowy
+            if (middle_finger < n1 && middle_finger > n2) {
+                send_buff('T');
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            } else if (middle_finger < n2) {
+                send_buff('R');
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            }
+
+            // 4) Serdeczny
+            if (ring_finger < n1 && ring_finger > n2) {
+                send_buff('Y');
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            } else if (ring_finger < n2) {
+                send_buff('C');
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            }
+
+            // 5) Mały
+            if (little_finger < n1 && little_finger > n2) {
+                send_buff('J');
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            } else if (little_finger < n2) {
+                send_buff('E');
+                vTaskDelay(pdMS_TO_TICKS(3000));
+                continue;
+            }
+
+            // //jesli chcemy wyczyscic
+            ESP_ERROR_CHECK(oled_text_flush(I2C_PORT)); //wyslac, robimy to tak bo tego nie ma w buff.c
+        }//if only one
+        
     }
 }
