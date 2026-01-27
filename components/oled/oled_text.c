@@ -184,32 +184,19 @@ esp_err_t oled_status_put5(int n1, int n2)
     for (int x = 0; x < OLED_WIDTH; x += FONT_STEP) {
         oled_text_draw_char(x, STATUS_PAGE, ' ');
     }
-   // cursor_x = STATUS_X; // wróć na początek po czyszczeniu
 
-    // wypisz STANY, a nie n1..n5
     char buf[32];
     snprintf(buf, sizeof(buf), "%d %d %d %d %d",
              thumb_num, index_finger_num, middle_finger_num,
              ring_finger_num, little_finger_num);
 
     for (char *p = buf; *p; p++) {
-       // esp_err_t r = oled_text_put_char(*p);
        if (*p == '\n') continue;
 
        oled_text_draw_char(x, page, *p);
         x += FONT_STEP;
-        /*if (r != ESP_OK) {
-            cursor_x = saved_x;
-            cursor_page = saved_page;
-            return r;
-        }*/
     }
-
-    // przywróć kursor “górnego” tekstu
-    //cursor_x = saved_x;
-    //cursor_page = saved_page;
     
-
     return ESP_OK;
 }
 
