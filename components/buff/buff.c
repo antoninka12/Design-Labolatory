@@ -45,12 +45,10 @@ void save_buff(char current)
     if(current=='\0'){
         start=0;
         saved=false;
-        //ESP_LOGI("BUFF", "pos=%u", position);
     }
 
     if(current!='\0' && start==0){
         start=now;
-        //ESP_LOGI("BUFF", "stan=%llu", start);
     }
 
     if(!saved && current!='\0' && (now-start)>=4000){
@@ -65,12 +63,9 @@ void save_buff(char current)
 
     if(current=='\0' && position>0 && last_data==0){
         last_data=now;
-        ESP_LOGI("BUFF", "time");
     }
 
     if(position>0 && (now-last_data>=3000) && current=='\0'){
-   
-        ESP_LOGI("BUFF", "read");
         for(int i=0; i<position; i++){
             send_buff(buffer[i]);
             vTaskDelay(pdMS_TO_TICKS(1000));

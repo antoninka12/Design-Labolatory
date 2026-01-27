@@ -65,13 +65,16 @@ void app_main(void)
     //KORZYSTAMY Z BUFORA I SEND BUFF BO ZOSTALO TAM DODANY OLED
     while (1) {
         static TickType_t last_read_time = 0;
-        int thumb = flex_read5();
+        int thumb = flex_read4(); 
         int index_finger = flex_read1();
-        int middle_finger = flex_read2();
-        int ring_finger = flex_read3();
-        int little_finger = flex_read4();
-
-        //ESP_LOGI("wait:", "%d", waiting);
+        int middle_finger = flex_read5(); 
+        int ring_finger = flex_read2(); 
+        int little_finger = flex_read3();
+        //3-mały
+        //2-serdeczny 
+        //5-środkowy
+        //4-kciuk
+        
         if (!waiting) {
             oled_status_put5(n1, n2);  
             ESP_ERROR_CHECK(oled_text_flush(I2C_PORT));
