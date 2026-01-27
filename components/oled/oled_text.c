@@ -121,52 +121,61 @@ esp_err_t oled_status_put5(int n1, int n2)
 
     int thumb = flex_read2();
     int index_finger = flex_read1();
-    int middle_finger = flex_read3();
+    int middle_finger = flex_read5();
     int ring_finger = flex_read4();
-    int little_finger = flex_read5();
-
+    int little_finger = flex_read3();
 
      // 1) Kciuk
-    if (thumb < n1 && thumb > n2) {
+    if (thumb < 733 && thumb > 617) {
         thumb_num=1;
-    } else if (thumb<n2){
+    } else if (thumb<617){
         thumb_num=2;
+    } else if(thumb==0){
+        thumb_num=3;
     } else {
         thumb_num=0;
     }
 
     // 2) Wskazujący
-    if (index_finger < n1 && index_finger > n2) {
+    if (index_finger < 750 && index_finger > 650) {
         index_finger_num=1;
-    } else if (index_finger < n2) {
+    } else if (index_finger < 650) {
         index_finger_num=2;
+    } else if(index_finger==0){
+        index_finger_num=3;
     } else {
         index_finger_num=0;
     }
 
     // 3) Środkowy
-    if (middle_finger < n1 && middle_finger > n2) {
+    if (middle_finger < 700 && middle_finger > 600) {
         middle_finger_num=1;
-    } else if (middle_finger < n2) {
+    } else if (middle_finger < 600) {
         middle_finger_num=2;
+    } else if(middle_finger==0){
+        middle_finger_num=3;
     } else {
         middle_finger_num=0;
     }
 
     // 4) Serdeczny
-    if (ring_finger < n1 && ring_finger > n2) {
+    if (ring_finger < 560 && ring_finger > 480) {
         ring_finger_num=1;
-    } else if (ring_finger < n2) {
+    } else if (ring_finger < 480) {
         ring_finger_num=2;
-    } else{
-        ring_finger_num=0;        
+    } else if(ring_finger==0){
+        ring_finger_num=3;        
+    } else {
+        ring_finger_num=0;
     }
 
     // 5) Mały
-    if (little_finger < n1 && little_finger > n2) {
+    if (little_finger < 553 && little_finger > 477) {
         little_finger_num=1;
-    } else if (little_finger < n2) {
+    } else if (little_finger < 477) {
         little_finger_num=2;
+    } else if(little_finger==0){
+        little_finger_num=3;
     } else {
         little_finger_num=0;
     }

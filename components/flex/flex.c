@@ -74,15 +74,15 @@ int flex_read5(void)
 
 bool flex_active(int v, int  n1)
 {
-    return (v < n1);
+    return (v != 0 && v < n1);
 }
 
-bool only_one_active(int t, int i, int m, int r, int l, int n1){
+bool only_one_active(int t, int i, int m, int r, int l){
     int add=0;
-    if(flex_active(t, n1)) add++;
-    if(flex_active(i, n1)) add++;
-    if(flex_active(m, n1)) add++;
-    if(flex_active(r, n1)) add++;
-    if(flex_active(l, n1)) add++;
+    if(flex_active(t, 733)) add++;
+    if(flex_active(i, 750)) add++;
+    if(flex_active(m, 700)) add++;
+    if(flex_active(r, 560)) add++;
+    if(flex_active(l, 553)) add++;
     return (add==1);
 }

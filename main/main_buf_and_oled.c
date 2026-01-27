@@ -56,8 +56,8 @@ void app_main(void)
     flex_init(); //Wstępna konfiguracja czujnika
 
     bool waiting=false;
-    const int n1=630; //próg 
-    const int n2=400; //prog2
+    const int n1=650; //próg 
+    const int n2=550; //prog2
 
     clear_buff(); //wyczysć przed startem
 
@@ -74,6 +74,12 @@ void app_main(void)
         //2-serdeczny 
         //5-środkowy
         //4-kciuk
+
+        // kciuk: 850, 500
+        //wskaz: 850, 550
+        // środkowy:800, 500
+        // serdeczny: 640, 400
+        // mały: 630, 400
         
         if (!waiting) {
             oled_status_put5(n1, n2);  
@@ -95,16 +101,16 @@ void app_main(void)
         waiting = false;
 
         vTaskDelay(pdMS_TO_TICKS(2000));
-        bool only_one = only_one_active(thumb, index_finger, middle_finger, ring_finger, little_finger, n1);
+        bool only_one = only_one_active(thumb, index_finger, middle_finger, ring_finger, little_finger);
         
         if(only_one){
             // 1) Kciuk
-            if (thumb < n1 && thumb > n2) {
+            if (thumb < 733 && thumb > 617 && thumb!=0) {
                 oled_text_backspace();
                 ESP_ERROR_CHECK(oled_text_flush(I2C_PORT));
                 vTaskDelay(pdMS_TO_TICKS(3000));   // debounce / antyspam
                 continue;
-            } else if (thumb<n2){
+            } else if (thumb<617 && thumb!=0){
                 ESP_ERROR_CHECK(oled_text_clear());
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
@@ -112,44 +118,44 @@ void app_main(void)
 
             
             // 2) Wskazujący
-            if (index_finger < n1 && index_finger > n2) {
+            if (index_finger < 750 && index_finger > 650 && index_finger!=0) {
                 send_buff(' ');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
-            } else if (index_finger < n2) {
+            } else if (index_finger < 650 && index_finger!=0){ 
                 send_buff('A');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             }
 
             // 3) Środkowy
-            if (middle_finger < n1 && middle_finger > n2) {
+            if (middle_finger < 700 && middle_finger > 600 && middle_finger!=0) {
                 send_buff('T');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
-            } else if (middle_finger < n2) {
+            } else if (middle_finger < 600 && middle_finger!=0){ 
                 send_buff('R');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             }
 
             // 4) Serdeczny
-            if (ring_finger < n1 && ring_finger > n2) {
+            if (ring_finger < 560 && ring_finger > 480 && ring_finger!=0) {
                 send_buff('Y');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
-            } else if (ring_finger < n2) {
+            } else if (ring_finger < 480 && ring_finger!=0){ 
                 send_buff('C');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             }
 
             // 5) Mały
-            if (little_finger < n1 && little_finger > n2) {
+            if (little_finger < 553 && little_finger > 477 && little_finger!=0) {
                 send_buff('J');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
-            } else if (little_finger < n2) {
+            } else if (little_finger < 477 && little_finger!=0){ 
                 send_buff('E');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
