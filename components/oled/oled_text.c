@@ -111,7 +111,6 @@ esp_err_t oled_status_put5(int n1, int n2)
     int middle_finger_num;
     int ring_finger_num;
     int little_finger_num; 
-
     
     uint8_t x = STATUS_X;
     uint8_t page = STATUS_PAGE;
@@ -177,7 +176,6 @@ esp_err_t oled_status_put5(int n1, int n2)
         little_finger_num=0;
     }
     
-    // wyczyść sam pasek statusu, żeby nie zostawały stare cyfry
     for (int x = 0; x < OLED_WIDTH; x += FONT_STEP) {
         oled_text_draw_char(x, STATUS_PAGE, ' ');
     }
@@ -189,11 +187,10 @@ esp_err_t oled_status_put5(int n1, int n2)
 
     for (char *p = buf; *p; p++) {
        if (*p == '\n') continue;
-
        oled_text_draw_char(x, page, *p);
         x += FONT_STEP;
     }
-    
+
     return ESP_OK;
 }
 
