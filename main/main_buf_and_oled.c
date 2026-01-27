@@ -67,9 +67,9 @@ void app_main(void)
         static TickType_t last_read_time = 0;
         int thumb = flex_read2(); 
         int index_finger = flex_read1();
-        int middle_finger = flex_read5(); 
+        int middle_finger = flex_read3(); 
         int ring_finger = flex_read4(); 
-        int little_finger = flex_read3();
+        int little_finger = flex_read5();
         //3-mały
         //2-serdeczny 
         //5-środkowy

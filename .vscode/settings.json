@@ -4,7 +4,7 @@
     "IDF_TARGET": "esp32"
   },
   "idf.flashType": "UART",
-  "idf.portWin": "COM7",
+  "idf.portWin": "COM3",
   "files.associations": {
     "i2c_master.h": "c",
     "i2c.h": "c",

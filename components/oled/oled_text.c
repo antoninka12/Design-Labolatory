@@ -21,6 +21,9 @@
 #define FONT_WIDTH 6
 #define FONT_HEIGHT 14
 #define FONT_PAGES 2 //14 pixels height -> 2 pages (8+6) 
+#define FONT_SPACING 1
+#define FONT_STEP (FONT_WIDTH + FONT_SPACING)
+#define OLED_PAGES_NEW OLED_PAGES - FONT_PAGES
 
 //static __uint8_t font_buffer[FONT_WIDTH * FONT_PAGES]; //buffer for one character
 static uint8_t oled_buffer[OLED_WIDTH * OLED_PAGES]; //buffer for whole oled
@@ -69,9 +72,9 @@ static esp_err_t oled_text_draw_char(uint8_t x, uint8_t page, char c)
 esp_err_t oled_text_newline(void)
 {
     cursor_x = 0;
-    cursor_page += FONT_PAGES; //zchodzenie w dół o jedna linie znaku : 2 strony 
+    cursor_page += FONT_PAGES; //zchodzenie w dół o jedna linie znaku : 2 strony  
 
-    if (cursor_page >= OLED_PAGES) {
+    if (cursor_page > OLED_PAGES_NEW) {
         cursor_page = 0;
         ESP_LOGW(TAG, "Cursor wrapped to top");
     }
@@ -81,12 +84,12 @@ esp_err_t oled_text_newline(void)
 esp_err_t oled_text_put_char(char c){
     if (c == '\n') {
     return oled_text_newline(); //przejscie do nowej linii jak \n
-    }
-    if (cursor_x > (OLED_WIDTH - FONT_WIDTH)) { //sprawdzenie czy znak zmiesci sie w poziomie, jak nie to nastepna linia
+    }//TU
+    if (cursor_x > (OLED_WIDTH - FONT_STEP)) { //sprawdzenie czy znak zmiesci sie w poziomie, jak nie to nastepna linia
         cursor_x = 0;
         cursor_page += FONT_PAGES;
     }
-    if (cursor_page + 1 >= OLED_PAGES) { //sprawdzenie czy w pionie jest miejsce, czy jest jeszcze strona, czysci jak pełne
+    if (cursor_page + FONT_PAGES > OLED_PAGES_NEW) { //sprawdzenie czy w pionie jest miejsce, czy jest jeszcze strona, czysci jak pełne
         ESP_LOGW(TAG, "Screen is full, cursor reset");
         return oled_text_clear(); 
     }
@@ -96,7 +99,7 @@ esp_err_t oled_text_put_char(char c){
         return ret;
     }
 
-    cursor_x += FONT_WIDTH; //po narysowaniu znaku przesuwamy kursor x
+    cursor_x += FONT_STEP; //po narysowaniu znaku przesuwamy kursor x
     return ESP_OK;
 }
 
@@ -110,17 +113,18 @@ esp_err_t oled_status_put5(int n1, int n2)
     int little_finger_num; 
 
     // zapamiętaj aktualny kursor “górnego” tekstu
-    uint8_t saved_x = cursor_x;
-    uint8_t saved_page = cursor_page;
+    //uint8_t saved_x = cursor_x;
+    //uint8_t saved_page = cursor_page;
     
-    cursor_x = STATUS_X;
-    cursor_page = STATUS_PAGE;
+    uint8_t x = STATUS_X;
+    uint8_t page = STATUS_PAGE;
 
-    int thumb = flex_read5();
+    int thumb = flex_read2();
     int index_finger = flex_read1();
-    int middle_finger = flex_read2();
-    int ring_finger = flex_read3();
-    int little_finger = flex_read4();
+    int middle_finger = flex_read3();
+    int ring_finger = flex_read4();
+    int little_finger = flex_read5();
+
 
      // 1) Kciuk
     if (thumb < n1 && thumb > n2) {
@@ -168,10 +172,10 @@ esp_err_t oled_status_put5(int n1, int n2)
     }
     
     // wyczyść sam pasek statusu, żeby nie zostawały stare cyfry
-    for (int i = 0; i < OLED_WIDTH / FONT_WIDTH; i++) {
-        oled_text_draw_char(cursor_x + i*FONT_WIDTH, cursor_page, ' ');
+    for (int x = 0; x < OLED_WIDTH; x += FONT_STEP) {
+        oled_text_draw_char(x, STATUS_PAGE, ' ');
     }
-    cursor_x = STATUS_X; // wróć na początek po czyszczeniu
+   // cursor_x = STATUS_X; // wróć na początek po czyszczeniu
 
     // wypisz STANY, a nie n1..n5
     char buf[32];
@@ -180,17 +184,21 @@ esp_err_t oled_status_put5(int n1, int n2)
              ring_finger_num, little_finger_num);
 
     for (char *p = buf; *p; p++) {
-        esp_err_t r = oled_text_put_char(*p);
-        if (r != ESP_OK) {
+       // esp_err_t r = oled_text_put_char(*p);
+       if (*p == '\n') continue;
+
+       oled_text_draw_char(x, page, *p);
+        x += FONT_STEP;
+        /*if (r != ESP_OK) {
             cursor_x = saved_x;
             cursor_page = saved_page;
             return r;
-        }
+        }*/
     }
 
     // przywróć kursor “górnego” tekstu
-    cursor_x = saved_x;
-    cursor_page = saved_page;
+    //cursor_x = saved_x;
+    //cursor_page = saved_page;
     
 
     return ESP_OK;
@@ -204,15 +212,15 @@ esp_err_t oled_text_backspace(void) //cofanie literki
         return ESP_OK;
     }
 
-    cursor_x -= FONT_WIDTH; //przesuwa o szerokosc jednego znaku 
+    cursor_x -= FONT_STEP; //przesuwa o szerokosc jednego znaku 
 
     uint16_t index_low  = cursor_page * OLED_WIDTH + cursor_x;
     uint16_t index_high = (cursor_page + 1) * OLED_WIDTH + cursor_x;
 
     ESP_LOGI("BS", "page=%d x=%d low=%d high=%d", (int)cursor_page, (int)cursor_x, (int)index_low, (int)index_high);
 
-    memset(&oled_buffer[index_low],  0x00, FONT_WIDTH); //czyszczenie
-    memset(&oled_buffer[index_high], 0x00, FONT_WIDTH);
+    memset(&oled_buffer[index_low],  0x00, FONT_STEP); //czyszczenie
+    memset(&oled_buffer[index_high], 0x00, FONT_STEP);
 
     return ESP_OK;
 }
