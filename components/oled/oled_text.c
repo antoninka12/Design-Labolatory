@@ -112,9 +112,6 @@ esp_err_t oled_status_put5(int n1, int n2)
     int ring_finger_num;
     int little_finger_num; 
 
-    // zapamiętaj aktualny kursor “górnego” tekstu
-    //uint8_t saved_x = cursor_x;
-    //uint8_t saved_page = cursor_page;
     
     uint8_t x = STATUS_X;
     uint8_t page = STATUS_PAGE;
