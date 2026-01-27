@@ -102,7 +102,7 @@ void app_main(void)
 
         vTaskDelay(pdMS_TO_TICKS(2000));
         bool only_one = only_one_active(thumb, index_finger, middle_finger, ring_finger, little_finger);
-        
+        //t, o, j, e, s, m, k
         if(only_one){
             // 1) Kciuk
             if (thumb < 733 && thumb > 617 && thumb!=0) {
@@ -123,40 +123,40 @@ void app_main(void)
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             } else if (index_finger < 650 && index_finger!=0){ 
-                send_buff('A');
+                send_buff('T');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             }
 
             // 3) Środkowy
             if (middle_finger < 700 && middle_finger > 600 && middle_finger!=0) {
-                send_buff('T');
+                send_buff('O');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             } else if (middle_finger < 600 && middle_finger!=0){ 
-                send_buff('R');
+                send_buff('J');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             }
 
             // 4) Serdeczny
             if (ring_finger < 560 && ring_finger > 480 && ring_finger!=0) {
-                send_buff('Y');
+                send_buff('E');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             } else if (ring_finger < 480 && ring_finger!=0){ 
-                send_buff('C');
+                send_buff('S');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             }
 
             // 5) Mały
             if (little_finger < 553 && little_finger > 477 && little_finger!=0) {
-                send_buff('J');
+                send_buff('M');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             } else if (little_finger < 477 && little_finger!=0){ 
-                send_buff('E');
+                send_buff('K');
                 vTaskDelay(pdMS_TO_TICKS(3000));
                 continue;
             }
@@ -165,5 +165,8 @@ void app_main(void)
             ESP_ERROR_CHECK(oled_text_flush(I2C_PORT)); //wyslac, robimy to tak bo tego nie ma w buff.c
         }//if only one
         
-    }
+    }// wskazujacy mocno, środkowy słabo, wskazujący słabo, 
+    //środkowy mocno, serdeczny słabo, s mocno, wskazujący mocno, wskazujący słabo,
+    // mały słabo, środkowy słabo, serdeczny mocno,  wskazujacy mocno, serdeczny słabo, mały mocno, 
+    //back ->` kciuk słabo, clear kciuk mocnoa
 }

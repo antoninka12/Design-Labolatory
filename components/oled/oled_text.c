@@ -121,9 +121,9 @@ esp_err_t oled_status_put5(int n1, int n2)
 
     int thumb = flex_read2();
     int index_finger = flex_read1();
-    int middle_finger = flex_read5();
+    int middle_finger = flex_read3();
     int ring_finger = flex_read4();
-    int little_finger = flex_read3();
+    int little_finger = flex_read5();
 
      // 1) Kciuk
     if (thumb < 733 && thumb > 617) {
