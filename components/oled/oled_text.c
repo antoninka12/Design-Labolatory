@@ -13,7 +13,7 @@
 
 #define OLED_WIDTH 128
 #define OLED_HEIGHT 64
-#define OLED_PAGES (OLED_HEIGHT / 8) //each page is 8 pixels height = 8 pages
+#define OLED_PAGES (OLED_HEIGHT / 8) //each page is 8 pixels height = 8 pages total
  
 #define STATUS_PAGE   (OLED_PAGES - FONT_PAGES)   // ostatnia linia
 #define STATUS_X      0                            // start od lewej
