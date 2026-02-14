@@ -72,7 +72,7 @@ Both team members participated in:
 
 
 
-- C / C++  
+- C 
 - ESP32  
 - ADC  
 - I2C  
