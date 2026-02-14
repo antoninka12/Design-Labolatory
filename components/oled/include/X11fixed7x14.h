@@ -1,3 +1,9 @@
+// Font data based on: 7x14.bdf
+// Source: Markus Kuhn
+// http://www.cl.cam.ac.uk/~mgk25/
+// Used for OLED display rendering
+
+
 // STARTFONT 2.1
 // COMMENT "$Id: 7x14.bdf,v 1.47 2006-01-05 20:24:11+00 mgk25 Rel $"
 // COMMENT "Send bug reports to Markus Kuhn <http://www.cl.cam.ac.uk/~mgk25/>"
