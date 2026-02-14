@@ -1,32 +1,79 @@
-# _Sample project_
+# Finger Bend Detection System – ESP32
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+An embedded system based on the ESP32 microcontroller that detects finger bending using flex sensors and displays corresponding letters on an OLED screen.
 
-This is the simplest buildable example. The example is used by command `idf.py create-project`
-that copies the project to user specified path and set it's name. For more information follow the [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project)
+## 📌 Project Overview
+
+This project implements a glove equipped with flex sensors to detect finger bend levels. Based on predefined thresholds, specific hand configurations are recognized and mapped to letters, which are then displayed on an OLED screen.
+
+The project focuses on hardware–software integration, analog signal processing, and low-level embedded programming.
+
+## External resources
+
+- 7x14 bitmap font, file: X11fixed7x14.h
+  Author: Markus Kuhn
+  Source: http://www.cl.cam.ac.uk/~mgk25/
+
+## ⚙️ Hardware
+
+- ESP32 microcontroller  
+- 5x flex sensors (one per finger)  
+- OLED display (I2C)  
+- Resistors and wiring  
+- Power supply  
+- Glove used as a base for mounting sensors  
+
+## 🧠 How It Works
+
+1. Flex sensors change resistance depending on finger bend.
+2. ESP32 reads analog values using ADC.
+3. Values are compared against defined thresholds.
+4. Specific finger configurations are mapped to letters.
+5. The detected letter is displayed on the OLED screen.
+
+## 🛠️ Software Features
+
+- Analog signal reading using ESP32 ADC  
+- Threshold-based classification of finger positions  
+- OLED initialization and control via I2C  
+- Frame buffer implementation for displaying characters  
+- Real-time update of displayed output  
+
+## 🧩 My Contribution
+
+This was a 2-person academic project. My main responsibilities included:
+
+- OLED display initialization and control  
+- Implementing the display buffer  
+- Rendering characters on screen (font file provided: X11fixed7x14.h by Markus Kuhn)  
+- Integrating display output with the detection logic  
+
+Both team members participated in:
+- Hardware assembly  
+- Soldering and wiring  
+
+## 🧪 What I Learned
+
+- Working with analog sensors and ADC on ESP32  
+- Interfacing peripherals using I2C  
+- Writing low-level display handling code  
+- Hardware–software integration in embedded systems  
+
+## 🚀 Possible Improvements
+
+- Calibration for different hand sizes  
+- Support for more letters / gestures  
+- Smoother signal processing  
+- Wireless output (e.g. Bluetooth)
+
+## 📷 Demo
+
+<img width="1004" height="1323" alt="image" src="https://github.com/user-attachments/assets/26f32f6d-660a-4cc8-a224-c5c124dde4b8" />
 
 
 
-## How to use example
-We encourage the users to use the example as a template for the new projects.
-A recommended way is to follow the instructions on a [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project).
-
-## Example folder contents
-
-The project **sample_project** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
-
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt`
-files that provide set of directives and instructions describing the project's source files and targets
-(executable, library, or both). 
-
-Below is short explanation of remaining files in the project folder.
-
-```
-├── CMakeLists.txt
-├── main
-│   ├── CMakeLists.txt
-│   └── main.c
-└── README.md                  This is the file you are currently reading
-```
-Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
-They are not used or needed when building with CMake and idf.py.
+- C / C++  
+- ESP32  
+- ADC  
+- I2C  
+- Embedded systems
