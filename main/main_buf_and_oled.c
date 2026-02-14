@@ -15,7 +15,7 @@
 #define TAG "MAIN" //w mainie korzystam z logów i tagów, w razie błędów można odczytac i jesli bedzie w pliku main to bedzie wlasnie to napisane
 
 //musza byc te definicje do dzialania kodow(to po prostu stałe takie jak piny itp): 
-// configuration of i2c 
+// configuration of i2c ports
 #define SDA_PIN 21      //pin number for SDA
 #define SCL_PIN 22      //for SCL 
 #define I2C_PORT I2C_NUM_0 //first port for i2c
