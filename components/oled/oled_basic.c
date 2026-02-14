@@ -10,7 +10,7 @@
 #include "driver/i2c.h"
 #include "oled_basic.h"
 
-#define TAG "OLED_BASIC" //tag for logs (esp_log.h)
+#define TAG "OLED_BASIC" //tag for logs  (esp_log.h)
 
 #define OLED_ADDR 0x3C 
 
